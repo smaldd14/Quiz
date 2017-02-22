@@ -72,31 +72,37 @@ class ViewController: UIViewController {
         
         UIView.animate(withDuration: 0.5,
                        delay: 0,
+                       usingSpringWithDamping: 0.5, //spring animation
+                       initialSpringVelocity: 0.5, //spring animation
                        options: [.curveLinear],
+                       
                        animations: {
                         self.currentQuestionLabel.alpha = 0
                         self.nextQuestionLabel.alpha = 1
                         
                         self.view.layoutIfNeeded()
         },
-                       /*completion: UIView.animate(withDuration: 0.5,
-                                      delay: 0.5,
-                                      usingSpringWithDamping: 0.5,
-                                      initialSpringVelocity: 0.5,
-                                      options: UIViewAnimationOptions.curveEaseOut,
-                                      animations: {
-                                        self.currentQuestionLabel.alpha = 0
-                                        self.nextQuestionLabel.alpha = 1
-                        
-                                        self.view.layoutIfNeeded()
-                       },*/
+                       
+                       
                        completion: { _ in
                         swap(&self.currentQuestionLabel, &self.nextQuestionLabel)
                         swap(&self.currentQuestionLabelCenterXConstraint, &self.nextQuestionLabelCenterXConstraint)
                         
                         self.updateOffScreenLabel()
-        })//)
-        
+        })
+        /*
+        UIView.animate(withDuration: 0.5,
+                       delay: 0.5,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 0.5,
+                       options: UIViewAnimationOptions.curveEaseOut,
+                       animations: {
+                        self.currentQuestionLabel.alpha = 0
+                        self.nextQuestionLabel.alpha = 1
+                        
+                        self.view.layoutIfNeeded()
+        })*/
+ 
         
         
     }
