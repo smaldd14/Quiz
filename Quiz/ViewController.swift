@@ -18,6 +18,11 @@ class ViewController: UIViewController {
     
     @IBOutlet var answerLabel: UILabel!
     
+    var screenWidth: CGFloat!
+    
+//    let currentQlayout = UILayoutGuide()
+//    let nextQlayout = UILayoutGuide()
+    
     let questions = [
         "From what is cognac made?",
         "What is 7+7?",
@@ -30,9 +35,12 @@ class ViewController: UIViewController {
     ]
     
     var currentQuestionIndex = 0
+    //to make sure the answers show up at the right time
+    var counter = 0
     
     @IBAction func showNextQuestion(_ sender: AnyObject) {
         currentQuestionIndex += 1
+        counter += 1
         if currentQuestionIndex == questions.count {
             currentQuestionIndex = 0
         }
@@ -46,13 +54,26 @@ class ViewController: UIViewController {
     
     @IBAction func showAnswer(_ sender: AnyObject) {
         let answer = answers[currentQuestionIndex]
-        answerLabel.text = answer
+        //basically, if my counter is odd, I want to show the answer
+        if counter % 2 != 0 {
+            answerLabel.text = answer
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        screenWidth = view.frame.width
         
         currentQuestionLabel.text = questions[currentQuestionIndex]
+        
+       //  Silver Challenge
+        
+        let space1 = UILayoutGuide()
+        self.view.addLayoutGuide(space1)
+        space1.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        currentQuestionLabel.leadingAnchor.constraint(equalTo: space1.trailingAnchor).isActive = true
+        currentQuestionLabel.trailingAnchor.constraint(equalTo: space1.leadingAnchor).isActive = true
+        
         updateOffScreenLabel()
     }
     
@@ -64,21 +85,21 @@ class ViewController: UIViewController {
         view.layoutIfNeeded()
         
         //center the X constraints
-        let screenWidth = view.frame.width
+        //let screenWidth = view.frame.width
         self.nextQuestionLabelCenterXConstraint.constant = 0
         self.currentQuestionLabelCenterXConstraint.constant += screenWidth
         
         //animate the alpha
         
-        UIView.animate(withDuration: 0.5,
+        UIView.animate(withDuration: 0.25,
                        delay: 0,
-                       usingSpringWithDamping: 0.5, //spring animation
-                       initialSpringVelocity: 0.5, //spring animation
+                       usingSpringWithDamping: 0.4, //spring animation
+                       initialSpringVelocity: 0.35, //spring animation
                        options: [.curveLinear],
                        
                        animations: {
-                        self.currentQuestionLabel.alpha = 0
-                        self.nextQuestionLabel.alpha = 1
+                        self.currentQuestionLabel.alpha = 0.5
+                        self.nextQuestionLabel.alpha = 0.5
                         
                         self.view.layoutIfNeeded()
         },
@@ -115,8 +136,9 @@ class ViewController: UIViewController {
     }
     
     func updateOffScreenLabel() {
-        let screenWidth = view.frame.width
-        nextQuestionLabelCenterXConstraint.constant = -screenWidth
+        print("in updateOffScreenLabel")
+        //let screenWidth = view.frame.width
+        nextQuestionLabelCenterXConstraint.constant = -screenWidth*2
     }
 }
 
